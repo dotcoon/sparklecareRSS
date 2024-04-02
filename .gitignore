@@ -1,0 +1,15 @@
+# Ignore system and editor files
+.DS_Store
+.vscode/
+.idea/
+
+# Ignore compiled files
+*.pyc
+*.class
+
+# Ignore virtual environment directories
+venv/
+env/
+
+# Ignore large files and directories
+output/
