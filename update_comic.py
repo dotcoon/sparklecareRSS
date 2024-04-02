@@ -4,9 +4,10 @@ from fpdf import FPDF
 
 comic_url = "https://www.sparklecarehospital.com/media/page/{}.png"
 latest_page = 0
+max_pages = 1000  # Set your desired maximum page limit
 
 # Find the newest page
-while True:
+while latest_page < max_pages:
 	response = requests.head(comic_url.format(latest_page + 1))
 	if response.status_code == 404:
 		break
