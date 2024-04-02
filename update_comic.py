@@ -86,12 +86,18 @@ pdf.set_font("Arial", size=12)
 
 for page_number in range(latest_page):
     pdf.cell(200, 10, txt=f"Page {page_number}", ln=True, align="C")
+    
+    # Add numeric images
+    numeric_image_path = os.path.join(output_dir, f"{page_number}.jpg")
+    if os.path.exists(numeric_image_path):
+        pdf.image(numeric_image_path, x=10, y=None, w=180)
+        
     for char in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']:
-        image_path = os.path.join(output_dir, f"{page_number}{char}.png")
+        image_path = os.path.join(output_dir, f"{page_number}{char}.jpg")
         if os.path.exists(image_path):
             # Open the image
             img = Image.open(image_path)
-
+            
             # Check if the image has an alpha channel
             if img.mode == 'RGBA':
                 # Convert the image to RGB format
@@ -100,10 +106,12 @@ for page_number in range(latest_page):
                 img_path_jpg = os.path.join(output_dir, f"{page_number}{char}.jpg")
                 img.save(img_path_jpg)
                 image_path = img_path_jpg
-
+                
             # Add the image to the PDF
             pdf.image(image_path, x=10, y=None, w=180)
-
+            
+    pdf.add_page()
+    
 pdf.output("output/comic.pdf")
 
 # Generate RSS feed
