@@ -91,27 +91,35 @@ for page_number in range(latest_page):
     numeric_image_path_png = os.path.join(output_dir, f"{page_number}.png")
     numeric_image_path_jpg = os.path.join(output_dir, f"{page_number}.jpg")
     if os.path.exists(numeric_image_path_png):
-        pdf.image(numeric_image_path_png, x=10, y=None, w=180)
+        img = Image.open(numeric_image_path_png)
+        if img.mode == 'RGBA':
+            # Convert the image to RGB format
+            img = img.convert('RGB')
+            # Save the image as JPEG
+            img_path_jpg = os.path.join(output_dir, f"{page_number}.jpg")
+            img.save(img_path_jpg)
+            pdf.image(img_path_jpg, x=10, y=None, w=180)
+        else:
+            pdf.image(numeric_image_path_png, x=10, y=None, w=180)
     elif os.path.exists(numeric_image_path_jpg):
         pdf.image(numeric_image_path_jpg, x=10, y=None, w=180)
         
     for char in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']:
-        image_path = os.path.join(output_dir, f"{page_number}{char}.png")
-        if os.path.exists(image_path):
-            # Open the image
-            img = Image.open(image_path)
-            
-            # Check if the image has an alpha channel
+        image_path_png = os.path.join(output_dir, f"{page_number}{char}.png")
+        image_path_jpg = os.path.join(output_dir, f"{page_number}{char}.jpg")
+        if os.path.exists(image_path_png):
+            img = Image.open(image_path_png)
             if img.mode == 'RGBA':
                 # Convert the image to RGB format
                 img = img.convert('RGB')
                 # Save the image as JPEG
                 img_path_jpg = os.path.join(output_dir, f"{page_number}{char}.jpg")
                 img.save(img_path_jpg)
-                image_path = img_path_jpg
-                
-            # Add the image to the PDF
-            pdf.image(image_path, x=10, y=None, w=180)
+                pdf.image(img_path_jpg, x=10, y=None, w=180)
+            else:
+                pdf.image(image_path_png, x=10, y=None, w=180)
+        elif os.path.exists(image_path_jpg):
+            pdf.image(image_path_jpg, x=10, y=None, w=180)
             
     pdf.add_page()
     
