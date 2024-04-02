@@ -72,8 +72,6 @@ for page_number in range(latest_page):
         response = requests.get(comic_url.format(f"{page_number}{char}"), headers=headers)
         if response.status_code == 200:
             image_urls.append(comic_url.format(f"{page_number}{char}"))
-        else:
-            break
 
     for image_url in image_urls:
         image_path = os.path.join(output_dir, f"{os.path.splitext(os.path.basename(image_url))[0]}.png")
@@ -87,7 +85,6 @@ pdf.add_page()
 pdf.set_font("Arial", size=12)
 
 for page_number in range(latest_page):
-    pdf.cell(200, 10, txt=f"Page {page_number}", ln=True, align="C")
     for char in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']:
         image_path = os.path.join(output_dir, f"{page_number}{char}.png")
         if os.path.exists(image_path):
@@ -105,10 +102,6 @@ for page_number in range(latest_page):
 
             # Add the image to the PDF
             pdf.image(image_path, x=10, y=None, w=180)
-        else:
-            print(f"Image {image_path} not found.")
-
-    pdf.add_page()
 
 pdf.output("output/comic.pdf")
 
