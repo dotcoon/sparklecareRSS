@@ -65,18 +65,25 @@ print(f"Total comic pages found: {latest_page - 1}")
 output_dir = "output/images"
 os.makedirs(output_dir, exist_ok=True)
 
-# Download images
+# Download images for existing pages
 for page_number in range(latest_page):
-    image_urls = [comic_url.format(page_number)]
+    image_path = os.path.join(output_dir, f"{page_number}.png")
+    response = requests.get(comic_url.format(page_number), headers=headers)
+    if response.status_code == 200:
+        with open(image_path, 'wb') as f:
+            f.write(response.content)
+    else:
+        print(f"Page {page_number} does not exist. Skipping...")
+
+    # Download images for pages with appended letters
     for char in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']:
+        image_path = os.path.join(output_dir, f"{page_number}{char}.png")
         response = requests.get(comic_url.format(f"{page_number}{char}"), headers=headers)
         if response.status_code == 200:
-            image_urls.append(comic_url.format(f"{page_number}{char}"))
-
-    for image_url in image_urls:
-        image_path = os.path.join(output_dir, f"{os.path.splitext(os.path.basename(image_url))[0]}.png")
-        with open(image_path, 'wb') as f:
-            f.write(requests.get(image_url, headers=headers).content)
+            with open(image_path, 'wb') as f:
+                f.write(response.content)
+        else:
+            break  # No need to check further if the current char doesn't exist
 
 # Generate PDF file
 pdf = FPDF()
@@ -86,43 +93,15 @@ pdf.set_font("Arial", size=12)
 
 for page_number in range(latest_page):
     pdf.cell(200, 10, txt=f"Page {page_number}", ln=True, align="C")
-    
-    # Add numeric images
-    numeric_image_path_png = os.path.join(output_dir, f"{page_number}.png")
-    numeric_image_path_jpg = os.path.join(output_dir, f"{page_number}.jpg")
-    if os.path.exists(numeric_image_path_png):
-        img = Image.open(numeric_image_path_png)
-        if img.mode == 'RGBA':
-            # Convert the image to RGB format
-            img = img.convert('RGB')
-            # Save the image as JPEG
-            img_path_jpg = os.path.join(output_dir, f"{page_number}.jpg")
-            img.save(img_path_jpg)
-            pdf.image(img_path_jpg, x=10, y=None, w=180)
-        else:
-            pdf.image(numeric_image_path_png, x=10, y=None, w=180)
-    elif os.path.exists(numeric_image_path_jpg):
-        pdf.image(numeric_image_path_jpg, x=10, y=None, w=180)
-        
-    for char in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']:
-        image_path_png = os.path.join(output_dir, f"{page_number}{char}.png")
-        image_path_jpg = os.path.join(output_dir, f"{page_number}{char}.jpg")
-        if os.path.exists(image_path_png):
-            img = Image.open(image_path_png)
-            if img.mode == 'RGBA':
-                # Convert the image to RGB format
-                img = img.convert('RGB')
-                # Save the image as JPEG
-                img_path_jpg = os.path.join(output_dir, f"{page_number}{char}.jpg")
-                img.save(img_path_jpg)
-                pdf.image(img_path_jpg, x=10, y=None, w=180)
-            else:
-                pdf.image(image_path_png, x=10, y=None, w=180)
-        elif os.path.exists(image_path_jpg):
-            pdf.image(image_path_jpg, x=10, y=None, w=180)
+
+    # Add images to the PDF
+    for char in [''] + ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']:
+        image_path = os.path.join(output_dir, f"{page_number}{char}.png")
+        if os.path.exists(image_path):
+            pdf.image(image_path, x=10, y=None, w=180)
             
     pdf.add_page()
-    
+
 pdf.output("output/comic.pdf")
 
 # Generate RSS feed
