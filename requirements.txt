@@ -2,4 +2,4 @@ feedparser
 feedgenerator
 fpdf
 requests
-certifi
+os
