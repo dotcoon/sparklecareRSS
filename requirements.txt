@@ -1,4 +1,5 @@
 feedparser
 feedgenerator
+Pillow
 fpdf
 requests
