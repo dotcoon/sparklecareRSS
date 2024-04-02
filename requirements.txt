@@ -1,3 +1,5 @@
 feedparser
+feedgenerator
 fpdf
 requests
+certifi
