@@ -2,8 +2,8 @@ name: Update Comic
 
 on:
   push:
-      branches:
-        - main # Replace with your desired branch name
+    branches:
+      - main # Replace with your desired branch name
     schedule:
       - cron: '0 0 * * *' # Run every day at midnight
 
