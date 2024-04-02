@@ -4,7 +4,7 @@ from fpdf import FPDF
 import os
 import feedgenerator
 
-comic_url = "https://www.sparklecarehospital.com/media/page/{}"
+comic_url = "https://www.sparklecarehospital.com/media/page/{}.png"
 latest_page = 0
 
 # Define headers to mimic a browser request
@@ -21,19 +21,29 @@ print(f"Found comic page 0. Checking for additional pages...")
 
 # Find the newest page
 while True:
-    found_alternate = False
-    for char in [''] + list('abcdefghijklmnopqrstuvwxyz'):
-        response = requests.get(comic_url.format(f"{latest_page}{char}"), headers=headers)
-        if response.status_code == 200:
-            latest_page += 1
-            print(f"Found comic page {latest_page}")
-            found_alternate = True
-        else:
+    # Check for the main page
+    response = requests.get(comic_url.format(latest_page), headers=headers)
+    if response.status_code == 200:
+        print(f"Found comic page {latest_page}")
+    else:
+        # If main page doesn't exist, check for alternate pages with appended letters
+        char = 'a'
+        while True:
+            response = requests.get(comic_url.format(f"{latest_page}{char}"), headers=headers)
+            if response.status_code == 200:
+                print(f"Found comic page {latest_page}{char}")
+                char = chr(ord(char) + 1)  # Move to the next letter
+            else:
+                break
+            
+        # If no alternate pages found, exit the loop
+        if char == 'a':
             break
-    if not found_alternate:
-        break
-
-print(f"Total comic pages found: {latest_page}")
+        
+    latest_page += 1
+    
+# Output the total number of comic pages found
+print(f"Total comic pages found: {latest_page - 1}")
 
 # Create a directory to store downloaded images
 output_dir = "output/images"
@@ -41,10 +51,18 @@ os.makedirs(output_dir, exist_ok=True)
 
 # Download images
 for page_number in range(latest_page + 1):
-    image_url = comic_url.format(page_number)
-    image_path = os.path.join(output_dir, f"{page_number}.png")
-    with open(image_path, 'wb') as f:
-        f.write(requests.get(image_url, headers=headers).content)
+    image_urls = [comic_url.format(page_number)]
+    for char in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']:
+        response = requests.get(comic_url.format(f"{page_number}{char}"), headers=headers)
+        if response.status_code == 200:
+            image_urls.append(comic_url.format(f"{page_number}{char}"))
+        else:
+            break
+
+    for image_url in image_urls:
+        image_path = os.path.join(output_dir, f"{os.path.splitext(os.path.basename(image_url))[0]}.png")
+        with open(image_path, 'wb') as f:
+            f.write(requests.get(image_url, headers=headers).content)
 
 # Generate PDF file
 pdf = FPDF()
@@ -52,32 +70,31 @@ pdf.set_auto_page_break(auto=True, margin=15)
 pdf.add_page()
 pdf.set_font("Arial", size=12)
 
-for page_number in range(latest_page):
+for page_number in range(latest_page + 1):
     pdf.cell(200, 10, txt=f"Page {page_number}", ln=True, align="C")
-    image_path = os.path.join(output_dir, f"{page_number}.png")
-    if os.path.exists(image_path):
-        # Open the image
-        img = Image.open(image_path)
+    for char in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']:
+        image_path = os.path.join(output_dir, f"{page_number}{char}.png")
+        if os.path.exists(image_path):
+            # Open the image
+            img = Image.open(image_path)
 
-        # Check if the image has an alpha channel
-        if img.mode == 'RGBA':
-            # Convert the image to RGB format
-            img = img.convert('RGB')
-            # Save the image as JPEG
-            img_path_jpg = os.path.join(output_dir, f"{page_number}.jpg")
-            img.save(img_path_jpg)
-            image_path = img_path_jpg
+            # Check if the image has an alpha channel
+            if img.mode == 'RGBA':
+                # Convert the image to RGB format
+                img = img.convert('RGB')
+                # Save the image as JPEG
+                img_path_jpg = os.path.join(output_dir, f"{page_number}{char}.jpg")
+                img.save(img_path_jpg)
+                image_path = img_path_jpg
 
-        # Add the image to the PDF
-        pdf.image(image_path, x=10, y=None, w=180)
-    else:
-        print(f"Image {image_path} not found.")
+            # Add the image to the PDF
+            pdf.image(image_path, x=10, y=None, w=180)
+        else:
+            print(f"Image {image_path} not found.")
 
     pdf.add_page()
 
-# Save PDF file
-pdf_file_path = "output/comic.pdf"
-pdf.output(pdf_file_path)
+pdf.output("output/comic.pdf")
 
 # Generate RSS feed
 feed = feedgenerator.Rss201rev2Feed(
@@ -86,7 +103,7 @@ feed = feedgenerator.Rss201rev2Feed(
     description="Updates for the comic.",
 )
 
-for page_number in range(latest_page):
+for page_number in range(1, latest_page + 1):  # Start from page 1
     feed.add_item(
         title=f"Page {page_number}",
         link=comic_url.format(page_number),
@@ -110,7 +127,7 @@ html_content = f"""<!DOCTYPE html>
     <h1>Comic</h1>
     <ul>
 """
-for page_number in range(latest_page):
+for page_number in range(1, latest_page + 1):  # Start from page 1
     html_content += f"<li><a href=\"{comic_url.format(page_number)}\">Page {page_number}</a></li>"
 
 html_content += """
