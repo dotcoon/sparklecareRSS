@@ -3,7 +3,7 @@ name: Update Comic
 on:
   push:
     branches:
-      - main
+      - main # Replace with your desired branch name
     schedule:
       - cron: '0 0 * * *' # Run every day at midnight
 
@@ -21,9 +21,6 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r requirements.txt
-
-      - name: Update YAML with cacert.pem path
-        run: python update_yaml.py
 
       - name: Run script
         run: python update_comic.py

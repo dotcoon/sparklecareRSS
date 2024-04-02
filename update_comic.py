@@ -1,10 +1,6 @@
 import requests
 import feedgenerator
 from fpdf import FPDF
-import certifi
-
-# Determine the path to cacert.pem
-requests.utils.DEFAULT_CA_BUNDLE_PATH = certifi.where()
 
 comic_url = "https://www.sparklecarehospital.com/media/page/{}.png"
 latest_page = 0
