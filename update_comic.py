@@ -85,6 +85,7 @@ pdf.add_page()
 pdf.set_font("Arial", size=12)
 
 for page_number in range(latest_page):
+    pdf.cell(200, 10, txt=f"Page {page_number}", ln=True, align="C")
     for char in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']:
         image_path = os.path.join(output_dir, f"{page_number}{char}.png")
         if os.path.exists(image_path):
@@ -112,12 +113,23 @@ feed = feedgenerator.Rss201rev2Feed(
     description="Updates for the comic.",
 )
 
-for page_number in range(1, latest_page + 1):  # Start from page 1
+for page_number in range(latest_page):  # Start from page 0
     feed.add_item(
         title=f"Page {page_number}",
         link=comic_url.format(page_number),
         description=f"Comic page {page_number}",
     )
+
+    for char in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']:
+        alt_page = f"{page_number}{char}"
+        alt_page_url = comic_url.format(alt_page)
+        response = requests.get(alt_page_url, headers=headers)
+        if response.status_code == 200:
+            feed.add_item(
+                title=f"Page {alt_page}",
+                link=alt_page_url,
+                description=f"Comic page {alt_page}",
+            )
 
 rss_feed = feed.writeString('utf-8')
 rss_feed_bytes = rss_feed.encode('utf-8')  # Encode the string to bytes
@@ -136,8 +148,15 @@ html_content = f"""<!DOCTYPE html>
     <h1>Comic</h1>
     <ul>
 """
-for page_number in range(1, latest_page + 1):  # Start from page 1
+for page_number in range(latest_page):  # Start from page 0
     html_content += f"<li><a href=\"{comic_url.format(page_number)}\">Page {page_number}</a></li>"
+
+    for char in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']:
+        alt_page = f"{page_number}{char}"
+        alt_page_url = comic_url.format(alt_page)
+        response = requests.get(alt_page_url, headers=headers)
+        if response.status_code == 200:
+            html_content += f"<li><a href=\"{alt_page_url}\">Page {alt_page}</a></li>"
 
 html_content += """
     </ul>
