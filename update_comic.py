@@ -88,20 +88,21 @@ for page_number in range(latest_page):
 # Generate PDF file
 pdf = FPDF()
 pdf.set_auto_page_break(auto=True, margin=15)
-pdf.add_page()
 pdf.set_font("Arial", size=12)
 
 for page_number in range(latest_page):
-    pdf.cell(200, 10, txt=f"Page {page_number}", ln=True, align="C")
-
-    # Add images to the PDF
-    for char in [''] + ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']:
-        image_path = os.path.join(output_dir, f"{page_number}{char}.png")
-        if os.path.exists(image_path):
-            pdf.image(image_path, x=10, y=None, w=180)
-            
     pdf.add_page()
-
+    pdf.cell(200, 10, txt=f"Page {page_number}", ln=True, align="C")
+    
+    # Add images to the PDF
+    for ext in ['.png', '.jpg']:
+        for char in [''] + ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']:
+            image_path = os.path.join(output_dir, f"{page_number}{char}{ext}")
+            if os.path.exists(image_path):
+                pdf.image(image_path, x=10, y=pdf.y + 10, w=180)
+                break  # Stop searching for other extensions if the image is found
+            
+# Output PDF file
 pdf.output("output/comic.pdf")
 
 # Generate RSS feed
