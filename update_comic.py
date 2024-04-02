@@ -88,12 +88,15 @@ for page_number in range(latest_page):
     pdf.cell(200, 10, txt=f"Page {page_number}", ln=True, align="C")
     
     # Add numeric images
-    numeric_image_path = os.path.join(output_dir, f"{page_number}.jpg")
-    if os.path.exists(numeric_image_path):
-        pdf.image(numeric_image_path, x=10, y=None, w=180)
+    numeric_image_path_png = os.path.join(output_dir, f"{page_number}.png")
+    numeric_image_path_jpg = os.path.join(output_dir, f"{page_number}.jpg")
+    if os.path.exists(numeric_image_path_png):
+        pdf.image(numeric_image_path_png, x=10, y=None, w=180)
+    elif os.path.exists(numeric_image_path_jpg):
+        pdf.image(numeric_image_path_jpg, x=10, y=None, w=180)
         
     for char in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']:
-        image_path = os.path.join(output_dir, f"{page_number}{char}.jpg")
+        image_path = os.path.join(output_dir, f"{page_number}{char}.png")
         if os.path.exists(image_path):
             # Open the image
             img = Image.open(image_path)
