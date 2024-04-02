@@ -1,8 +1,11 @@
 name: Update Comic
 
 on:
-  schedule:
-    - cron: '0 0 * * *' # Run every day at midnight
+  push:
+      branches:
+        - main # Replace with your desired branch name
+    schedule:
+      - cron: '0 0 * * *' # Run every day at midnight
 
 jobs:
   update_comic:
