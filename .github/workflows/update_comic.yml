@@ -1,36 +1,37 @@
 name: Update Comic
-true:
+
+on:
   push:
     branches:
-    - main
-  schedule:
-  - cron: 0 0 * * *
+      - main
+    schedule:
+      - cron: '0 0 * * *' # Run every day at midnight
+
 jobs:
   update_comic:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.x
-    - name: Install dependencies
-      run: pip install -r requirements.txt
-    - name: Set REQUESTS_CA_BUNDLE
-      run: echo 'export REQUESTS_CA_BUNDLE=/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/certifi/cacert.pem'
-        >> $GITHUB_ENV
-    - name: Update YAML with cacert.pem path
-      run: python update_yaml.py
-    - name: Run script
-      run: python update_comic.py
-    - name: Commit changes
-      run: 'git config --global user.email "github-actions@users.noreply.github.com"
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-        git config --global user.name "GitHub Actions"
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
 
-        git add .
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-        git commit -m "Update comic"
+      - name: Update YAML with cacert.pem path
+        run: python update_yaml.py
 
-        git push'
+      - name: Run script
+        run: python update_comic.py
+
+      - name: Commit changes
+        run: |
+          git config --global user.email "github-actions@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
+          git add .
+          git commit -m "Update comic"
+          git push
