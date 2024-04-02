@@ -28,20 +28,36 @@ while True:
     else:
         # If main page doesn't exist, check for alternate pages with appended letters
         char = 'a'
+        alternate_found = False
         while True:
             response = requests.get(comic_url.format(f"{latest_page}{char}"), headers=headers)
             if response.status_code == 200:
                 print(f"Found comic page {latest_page}{char}")
                 char = chr(ord(char) + 1)  # Move to the next letter
+                alternate_found = True
             else:
                 break
-            
-        # If no alternate pages found, exit the loop
-        if char == 'a':
-            break
-        
+
+        # If no alternate pages found, check for the next page without letters
+        if not alternate_found:
+            response = requests.get(comic_url.format(f"{latest_page + 1}"), headers=headers)
+            if response.status_code == 200:
+                print(f"Found comic page {latest_page + 1}")
+            else:
+                # If the page doesn't exist, check for v2 pages
+                v2_page = 0
+                while True:
+                    response = requests.get(comic_url.format(f"v2/{v2_page}"), headers=headers)
+                    if response.status_code == 200:
+                        print(f"Found comic page v2/{v2_page}")
+                        v2_page += 1
+                    else:
+                        break
+                latest_page += v2_page
+                break
+
     latest_page += 1
-    
+
 # Output the total number of comic pages found
 print(f"Total comic pages found: {latest_page - 1}")
 
@@ -50,7 +66,7 @@ output_dir = "output/images"
 os.makedirs(output_dir, exist_ok=True)
 
 # Download images
-for page_number in range(latest_page + 1):
+for page_number in range(latest_page):
     image_urls = [comic_url.format(page_number)]
     for char in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']:
         response = requests.get(comic_url.format(f"{page_number}{char}"), headers=headers)
@@ -70,7 +86,7 @@ pdf.set_auto_page_break(auto=True, margin=15)
 pdf.add_page()
 pdf.set_font("Arial", size=12)
 
-for page_number in range(latest_page + 1):
+for page_number in range(latest_page):
     pdf.cell(200, 10, txt=f"Page {page_number}", ln=True, align="C")
     for char in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']:
         image_path = os.path.join(output_dir, f"{page_number}{char}.png")
