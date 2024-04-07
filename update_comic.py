@@ -66,9 +66,12 @@ feed = feedgenerator.Rss201rev2Feed(
     description="Updates for the comic.",
 )
 
+# Add extra image to RSS
+feed.add_image(title="W3Schools.com", link="https://www.w3schools.com", url="https://www.w3schools.com/images/logo.gif")
+
 for page_number in range(latest_page - 1, -1, -1):  # Start from the latest page
     description = f"""<![CDATA[<p><a href="{comic_url.format(page_number)}" rel="bookmark" title="Comic Page {page_number}">
-        <img src="{comic_url.format(page_number)}" alt="" loading="lazy" /></a></p>]]>"""
+        <img src="{comic_url.format(page_number)}" alt="" loading="lazy" /></a></p>"""
     feed.add_item(
         title=f"Page {page_number}",
         link=comic_url.format(page_number),
@@ -81,7 +84,7 @@ for page_number in range(latest_page - 1, -1, -1):  # Start from the latest page
         response = requests.get(alt_page_url, headers=headers)
         if response.status_code == 200:
             description = f"""<![CDATA[<p><a href="{alt_page_url}" rel="bookmark" title="Comic Page {alt_page}">
-                <img src="{alt_page_url}" alt="" loading="lazy" /></a></p>]]>"""
+                <img src="{alt_page_url}" alt="" loading="lazy" /></a></p>"""
             feed.add_item(
                 title=f"Page {alt_page}",
                 link=alt_page_url,
@@ -136,22 +139,22 @@ html_content = f"""<!DOCTYPE html>
             background-color: rgba(255, 255, 255, 0.8);
         }}
         .button-back {{
-            left: 0;
+            left: -100px;
         }}
         .button-next {{
-            right: 0;
+            right: -100px;
         }}
     </style>
 </head>
 <body>
     <div class="slideshow">
-        <img class="image" src="{comic_url.format(latest_page - 1)}" alt="Comic Image">
+        <img class="image" src="{comic_url.format(0)}" alt="Comic Image">
         <button class="button button-back" onclick="previousSlide()">Back</button>
         <button class="button button-next" onclick="nextSlide()">Next</button>
     </div>
 
     <script>
-        var currentPage = {latest_page - 1};
+        var currentPage = 0;
         var totalPages = {latest_page};
 
         function previousSlide() {{
