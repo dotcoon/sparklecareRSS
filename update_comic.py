@@ -66,36 +66,6 @@ feed = feedgenerator.Rss201rev2Feed(
     description="Updates for the comic.",
 )
 
-# Add extra image to RSS
-feed.add_image(title="W3Schools.com", link="https://www.w3schools.com", url="https://www.w3schools.com/images/logo.gif")
-
-for page_number in range(latest_page - 1, -1, -1):  # Start from the latest page
-    description = f"""<![CDATA[<p><a href="{comic_url.format(page_number)}" rel="bookmark" title="Comic Page {page_number}">
-        <img src="{comic_url.format(page_number)}" alt="" loading="lazy" /></a></p>"""
-    feed.add_item(
-        title=f"Page {page_number}",
-        link=comic_url.format(page_number),
-        description=description,
-    )
-
-    for char in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']:
-        alt_page = f"{page_number}{char}"
-        alt_page_url = comic_url.format(alt_page)
-        response = requests.get(alt_page_url, headers=headers)
-        if response.status_code == 200:
-            description = f"""<![CDATA[<p><a href="{alt_page_url}" rel="bookmark" title="Comic Page {alt_page}">
-                <img src="{alt_page_url}" alt="" loading="lazy" /></a></p>"""
-            feed.add_item(
-                title=f"Page {alt_page}",
-                link=alt_page_url,
-                description=description,
-            )
-
-rss_feed = feed.writeString('utf-8')
-rss_feed_bytes = rss_feed.encode('utf-8')  # Encode the string to bytes
-with open("output/comic_feed.xml", "wb") as f:  # Open file in binary mode
-    f.write(rss_feed_bytes)
-
 # Generate HTML page
 html_content = f"""<!DOCTYPE html>
 <html lang="en">
@@ -190,5 +160,39 @@ html_content = f"""<!DOCTYPE html>
 </body>
 </html>
 """
+
+for page_number in range(latest_page - 1, -1, -1):  # Start from the latest page
+    # Check if the main page exists
+    response = requests.get(comic_url.format(page_number), headers=headers)
+    if response.status_code == 200:
+        description = f"""<![CDATA[<p><a href="{comic_url.format(page_number)}" rel="bookmark" title="Comic Page {page_number}">
+            <img src="{comic_url.format(page_number)}" alt="" loading="lazy" /></a></p>"""
+        feed.add_item(
+            title=f"Page {page_number}",
+            link=comic_url.format(page_number),
+            description=description,
+        )
+
+    # Check for alternate pages with appended letters
+    for char in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']:
+        alt_page = f"{page_number}{char}"
+        alt_page_url = comic_url.format(alt_page)
+        response = requests.get(alt_page_url, headers=headers)
+        if response.status_code == 200:
+            description = f"""<![CDATA[<p><a href="{alt_page_url}" rel="bookmark" title="Comic Page {alt_page}">
+                <img src="{alt_page_url}" alt="" loading="lazy" /></a></p>"""
+            feed.add_item(
+                title=f"Page {alt_page}",
+                link=alt_page_url,
+                description=description,
+            )
+
+            html_content += f"""<img class="image" src="{alt_page_url}" alt="Comic Image">"""
+
+rss_feed = feed.writeString('utf-8')
+rss_feed_bytes = rss_feed.encode('utf-8')  # Encode the string to bytes
+with open("output/comic_feed.xml", "wb") as f:  # Open file in binary mode
+    f.write(rss_feed_bytes)
+
 with open("output/comic.html", "w") as f:
     f.write(html_content)
