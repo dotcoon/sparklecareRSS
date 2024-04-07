@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comic</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .slideshow {
+            position: relative;
+            max-width: 80%;
+            max-height: 80vh;
+            margin: auto;
+        }
+        .image {
+            display: block;
+            width: auto;
+            max-height: 80vh;
+            margin: auto;
+        }
+        .button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.5);
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        .button-back {
+            left: -100px;
+        }
+        .button-next {
+            right: -100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slideshow">
+        <img class="image" src="https://www.sparklecarehospital.com/media/page/0.png" alt="Comic Image">
+        <button class="button button-back" onclick="previousSlide()">Back</button>
+        <button class="button button-next" onclick="nextSlide()">Next</button>
+    </div>
+
+    <script>
+        var currentPage1 = 0;
+        var totalPages1 = 143;
+
+        function previousSlide() {
+            currentPage1 = (currentPage1 - 1 + totalPages1) % totalPages1;
+            updateSlide1();
+        }
+
+        function nextSlide() {
+            currentPage1 = (currentPage1 + 1) % totalPages1;
+            updateSlide1();
+        }
+
+        function updateSlide1() {
+            var image = document.querySelector('.image');
+            image.src = "https://www.sparklecarehospital.com/media/page/.png";
+
+            var pageNumber = currentPage1;
+            for (var i = 0; i < 10; i++) {
+                var altPage = pageNumber + String.fromCharCode(97 + i);
+                var altPageUrl = "https://www.sparklecarehospital.com/media/page/.png";
+
+                var http = new XMLHttpRequest();
+                http.open('HEAD', altPageUrl, false);
+                http.send();
+
+                if (http.status != 404) {
+                    image.src = altPageUrl;
+                    break;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
