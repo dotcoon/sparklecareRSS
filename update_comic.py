@@ -63,14 +63,14 @@ def generate_html(volume, comic_url):
     page_number = 0
     while True:
         image_found = False
-        char = ''
+        char = 'a'  # Initialize char with 'a'
         while True:
             url = comic_url.format(page_number, char)
             if image_exists(url):
                 image_found = True
                 html_content += f'<img class="image" src="{url}" alt="Comic Volume {volume}, Page {page_number}">'
                 page_number += 1
-                char = ''
+                char = 'a'  # Reset char for next iteration
             else:
                 char = chr(ord(char) + 1)
                 if char > 'z':
