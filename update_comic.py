@@ -17,7 +17,10 @@ headers = {
 # Function to check if an image exists at a URL
 def image_exists(url):
     response = requests.head(url, headers=headers)
-    return response.status_code == 200
+    if response.status_code == 200:
+        print(f"Found existing image at URL: {url}")
+        return True
+    return False
 
 # Generate RSS feed
 def generate_rss(feed_title, feed_link, feed_description):
@@ -97,4 +100,5 @@ for volume, comic_url in comic_urls.items():
 
     # Write RSS feed to a file
     rss_feed_output_path = f"comic_{volume}_feed.xml"
-    rss_feed.write(open(rss_feed_output_path, 'w'))
+    with open(rss_feed_output_path, 'w', encoding='utf-8') as f:
+        rss_feed.write(f)
