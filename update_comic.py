@@ -63,14 +63,18 @@ def generate_html(volume, comic_url):
     page_number = 0
     while True:
         image_found = False
-        for char in ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']:
+        char = ''
+        while True:
             url = comic_url.format(page_number, char)
             if image_exists(url):
                 image_found = True
                 html_content += f'<img class="image" src="{url}" alt="Comic Volume {volume}, Page {page_number}">'
                 page_number += 1
+                char = ''
             else:
-                break
+                char = chr(ord(char) + 1)
+                if char > 'z':
+                    break
         
         if not image_found:
             break
@@ -101,4 +105,4 @@ for volume, comic_url in comic_urls.items():
     # Write RSS feed to a file
     rss_feed_output_path = f"comic_{volume}_feed.xml"
     with open(rss_feed_output_path, 'w', encoding='utf-8') as f:
-        rss_feed.write(f)
+        rss_feed.write(f, encoding='utf-8')
