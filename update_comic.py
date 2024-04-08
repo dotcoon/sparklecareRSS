@@ -120,34 +120,34 @@ def generate_html(volume, comic_url):
         if not image_found:
             break
 
-    html_content += """
+    html_content += f"""
 </div>
 <script>
-    function resizeImages(size) {
+    function resizeImages(size) {{
         const images = document.querySelectorAll('.image');
-        images.forEach(image => {
-            if (size === 'small') {
+        images.forEach(image => {{
+            if (size === 'small') {{
                 image.style.width = '100px';
-            } else if (size === 'medium') {
+            }} else if (size === 'medium') {{
                 image.style.width = '200px';
-            } else if (size === 'large') {
+            }} else if (size === 'large') {{
                 image.style.width = '300px';
-            } else if (size === 'custom') {
+            }} else if (size === 'custom') {{
                 const customSize = document.getElementById('customSize').value;
-                if (customSize) {
+                if (customSize) {{
                     image.style.width = customSize + 'px';
-                }
-            }
-        });
-    }
+                }}
+            }}
+        }});
+    }}
 
-    function openRSSFeed() {
-        window.open('comic_${volume}_feed.xml', '_blank');
-    }
+    function openRSSFeed() {{
+        window.open('comic_{volume}_feed.xml', '_blank');
+    }}
 </script>
 </body>
 </html>
-""".format(volume)
+"""
 
     return html_content
 
