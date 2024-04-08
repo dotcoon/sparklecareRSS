@@ -9,10 +9,46 @@
             margin: 0;
             padding: 0;
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        .toolbar {
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: center; /* Center the toolbar horizontally */
+            align-items: center;
+        }
+        .toolbar button, .toolbar input[type='text'] {
+            background-color: #555;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .toolbar input[type='text'] {
+            width: 100px;
+        }
+        .toolbar button:hover, .toolbar input[type='text']:hover {
+            background-color: #777;
+        }
+        .toolbar button:active, .toolbar input[type='text']:active {
+            background-color: #444;
+        }
+        .image-container {
+            display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            background-color: #f0f0f0;
         }
         .image {
             display: block;
@@ -23,6 +59,41 @@
     </style>
 </head>
 <body>
+<div class="toolbar">
+    <div>
+        <button onclick="resizeImages('small')">Small</button>
+        <button onclick="resizeImages('medium')">Medium</button>
+        <button onclick="resizeImages('large')">Large</button>
+        <input type="text" id="customSize" placeholder="Custom Size">
+        <button onclick="resizeImages('custom')">Apply</button>
+    </div>
+    <button onclick="openRSSFeed()">Open RSS Feed</button>
+</div>
+<div class="image-container">
 <img class="image" src="https://www.sparklecarehospital.com/media/page/0.png" alt="Comic Volume vol1, Page 0"><img class="image" src="https://www.sparklecarehospital.com/media/page/1.png" alt="Comic Volume vol1, Page 1"><img class="image" src="https://www.sparklecarehospital.com/media/page/2.png" alt="Comic Volume vol1, Page 2"><img class="image" src="https://www.sparklecarehospital.com/media/page/3.png" alt="Comic Volume vol1, Page 3"><img class="image" src="https://www.sparklecarehospital.com/media/page/4.png" alt="Comic Volume vol1, Page 4"><img class="image" src="https://www.sparklecarehospital.com/media/page/5.png" alt="Comic Volume vol1, Page 5"><img class="image" src="https://www.sparklecarehospital.com/media/page/6.png" alt="Comic Volume vol1, Page 6"><img class="image" src="https://www.sparklecarehospital.com/media/page/7.png" alt="Comic Volume vol1, Page 7"><img class="image" src="https://www.sparklecarehospital.com/media/page/8.png" alt="Comic Volume vol1, Page 8"><img class="image" src="https://www.sparklecarehospital.com/media/page/9.png" alt="Comic Volume vol1, Page 9"><img class="image" src="https://www.sparklecarehospital.com/media/page/10.png" alt="Comic Volume vol1, Page 10"><img class="image" src="https://www.sparklecarehospital.com/media/page/11.png" alt="Comic Volume vol1, Page 11"><img class="image" src="https://www.sparklecarehospital.com/media/page/12.png" alt="Comic Volume vol1, Page 12"><img class="image" src="https://www.sparklecarehospital.com/media/page/13.png" alt="Comic Volume vol1, Page 13"><img class="image" src="https://www.sparklecarehospital.com/media/page/14.png" alt="Comic Volume vol1, Page 14"><img class="image" src="https://www.sparklecarehospital.com/media/page/15.png" alt="Comic Volume vol1, Page 15"><img class="image" src="https://www.sparklecarehospital.com/media/page/16a.png" alt="Comic Volume vol1, Page 16"><img class="image" src="https://www.sparklecarehospital.com/media/page/17.png" alt="Comic Volume vol1, Page 17"><img class="image" src="https://www.sparklecarehospital.com/media/page/18.png" alt="Comic Volume vol1, Page 18"><img class="image" src="https://www.sparklecarehospital.com/media/page/19.png" alt="Comic Volume vol1, Page 19"><img class="image" src="https://www.sparklecarehospital.com/media/page/20.png" alt="Comic Volume vol1, Page 20"><img class="image" src="https://www.sparklecarehospital.com/media/page/21b.png" alt="Comic Volume vol1, Page 21"><img class="image" src="https://www.sparklecarehospital.com/media/page/22.png" alt="Comic Volume vol1, Page 22"><img class="image" src="https://www.sparklecarehospital.com/media/page/23.png" alt="Comic Volume vol1, Page 23"><img class="image" src="https://www.sparklecarehospital.com/media/page/24.png" alt="Comic Volume vol1, Page 24"><img class="image" src="https://www.sparklecarehospital.com/media/page/25.png" alt="Comic Volume vol1, Page 25"><img class="image" src="https://www.sparklecarehospital.com/media/page/26.png" alt="Comic Volume vol1, Page 26"><img class="image" src="https://www.sparklecarehospital.com/media/page/27.png" alt="Comic Volume vol1, Page 27"><img class="image" src="https://www.sparklecarehospital.com/media/page/28a.png" alt="Comic Volume vol1, Page 28"><img class="image" src="https://www.sparklecarehospital.com/media/page/29.png" alt="Comic Volume vol1, Page 29"><img class="image" src="https://www.sparklecarehospital.com/media/page/30.png" alt="Comic Volume vol1, Page 30"><img class="image" src="https://www.sparklecarehospital.com/media/page/31.png" alt="Comic Volume vol1, Page 31"><img class="image" src="https://www.sparklecarehospital.com/media/page/32.png" alt="Comic Volume vol1, Page 32"><img class="image" src="https://www.sparklecarehospital.com/media/page/33.png" alt="Comic Volume vol1, Page 33"><img class="image" src="https://www.sparklecarehospital.com/media/page/34.png" alt="Comic Volume vol1, Page 34"><img class="image" src="https://www.sparklecarehospital.com/media/page/35.png" alt="Comic Volume vol1, Page 35"><img class="image" src="https://www.sparklecarehospital.com/media/page/36.png" alt="Comic Volume vol1, Page 36"><img class="image" src="https://www.sparklecarehospital.com/media/page/37.png" alt="Comic Volume vol1, Page 37"><img class="image" src="https://www.sparklecarehospital.com/media/page/38.png" alt="Comic Volume vol1, Page 38"><img class="image" src="https://www.sparklecarehospital.com/media/page/39.png" alt="Comic Volume vol1, Page 39"><img class="image" src="https://www.sparklecarehospital.com/media/page/40a.png" alt="Comic Volume vol1, Page 40"><img class="image" src="https://www.sparklecarehospital.com/media/page/41.png" alt="Comic Volume vol1, Page 41"><img class="image" src="https://www.sparklecarehospital.com/media/page/42a.png" alt="Comic Volume vol1, Page 42"><img class="image" src="https://www.sparklecarehospital.com/media/page/43.png" alt="Comic Volume vol1, Page 43"><img class="image" src="https://www.sparklecarehospital.com/media/page/44.png" alt="Comic Volume vol1, Page 44"><img class="image" src="https://www.sparklecarehospital.com/media/page/45.png" alt="Comic Volume vol1, Page 45"><img class="image" src="https://www.sparklecarehospital.com/media/page/46.png" alt="Comic Volume vol1, Page 46"><img class="image" src="https://www.sparklecarehospital.com/media/page/47.png" alt="Comic Volume vol1, Page 47"><img class="image" src="https://www.sparklecarehospital.com/media/page/48.png" alt="Comic Volume vol1, Page 48"><img class="image" src="https://www.sparklecarehospital.com/media/page/49.png" alt="Comic Volume vol1, Page 49"><img class="image" src="https://www.sparklecarehospital.com/media/page/50.png" alt="Comic Volume vol1, Page 50"><img class="image" src="https://www.sparklecarehospital.com/media/page/51.png" alt="Comic Volume vol1, Page 51"><img class="image" src="https://www.sparklecarehospital.com/media/page/52.png" alt="Comic Volume vol1, Page 52"><img class="image" src="https://www.sparklecarehospital.com/media/page/53.png" alt="Comic Volume vol1, Page 53"><img class="image" src="https://www.sparklecarehospital.com/media/page/54.png" alt="Comic Volume vol1, Page 54"><img class="image" src="https://www.sparklecarehospital.com/media/page/55.png" alt="Comic Volume vol1, Page 55"><img class="image" src="https://www.sparklecarehospital.com/media/page/56.png" alt="Comic Volume vol1, Page 56"><img class="image" src="https://www.sparklecarehospital.com/media/page/57.png" alt="Comic Volume vol1, Page 57"><img class="image" src="https://www.sparklecarehospital.com/media/page/58.png" alt="Comic Volume vol1, Page 58"><img class="image" src="https://www.sparklecarehospital.com/media/page/59.png" alt="Comic Volume vol1, Page 59"><img class="image" src="https://www.sparklecarehospital.com/media/page/60.png" alt="Comic Volume vol1, Page 60"><img class="image" src="https://www.sparklecarehospital.com/media/page/61.png" alt="Comic Volume vol1, Page 61"><img class="image" src="https://www.sparklecarehospital.com/media/page/62.png" alt="Comic Volume vol1, Page 62"><img class="image" src="https://www.sparklecarehospital.com/media/page/63.png" alt="Comic Volume vol1, Page 63"><img class="image" src="https://www.sparklecarehospital.com/media/page/64.png" alt="Comic Volume vol1, Page 64"><img class="image" src="https://www.sparklecarehospital.com/media/page/65.png" alt="Comic Volume vol1, Page 65"><img class="image" src="https://www.sparklecarehospital.com/media/page/66.png" alt="Comic Volume vol1, Page 66"><img class="image" src="https://www.sparklecarehospital.com/media/page/67.png" alt="Comic Volume vol1, Page 67"><img class="image" src="https://www.sparklecarehospital.com/media/page/68.png" alt="Comic Volume vol1, Page 68"><img class="image" src="https://www.sparklecarehospital.com/media/page/69.png" alt="Comic Volume vol1, Page 69"><img class="image" src="https://www.sparklecarehospital.com/media/page/70.png" alt="Comic Volume vol1, Page 70"><img class="image" src="https://www.sparklecarehospital.com/media/page/71.png" alt="Comic Volume vol1, Page 71"><img class="image" src="https://www.sparklecarehospital.com/media/page/72.png" alt="Comic Volume vol1, Page 72"><img class="image" src="https://www.sparklecarehospital.com/media/page/73.png" alt="Comic Volume vol1, Page 73"><img class="image" src="https://www.sparklecarehospital.com/media/page/74.png" alt="Comic Volume vol1, Page 74"><img class="image" src="https://www.sparklecarehospital.com/media/page/75.png" alt="Comic Volume vol1, Page 75"><img class="image" src="https://www.sparklecarehospital.com/media/page/76.png" alt="Comic Volume vol1, Page 76">
+</div>
+<script>
+    function resizeImages(size) {
+        const images = document.querySelectorAll('.image');
+        images.forEach(image => {
+            if (size === 'small') {
+                image.style.width = '100px';
+            } else if (size === 'medium') {
+                image.style.width = '200px';
+            } else if (size === 'large') {
+                image.style.width = '300px';
+            } else if (size === 'custom') {
+                const customSize = document.getElementById('customSize').value;
+                if (customSize) {
+                    image.style.width = customSize + 'px';
+                }
+            }
+        });
+    }
+
+    function openRSSFeed() {
+        window.open('comic_vol1_feed.xml', '_blank');
+    }
+</script>
 </body>
 </html>
