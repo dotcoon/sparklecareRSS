@@ -40,16 +40,15 @@ def generate_html(volume, comic_url):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comic Volume {volume}</title>
     <style>
-        body {
+        body {{
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             background-color: #f0f0f0;
-        }
-        
-        .toolbar {
+        }}
+        .toolbar {{
             width: 100%;
             padding: 10px;
             background-color: #333;
@@ -57,10 +56,8 @@ def generate_html(volume, comic_url):
             display: flex;
             justify-content: center; /* Center the toolbar horizontally */
             align-items: center;
-        }
-        
-        .toolbar button,
-        .toolbar input[type='text'] {
+        }}
+        .toolbar button, .toolbar input[type='text'] {{
             background-color: #555;
             border: none;
             color: white;
@@ -72,35 +69,28 @@ def generate_html(volume, comic_url):
             margin: 4px 2px;
             cursor: pointer;
             border-radius: 4px;
-        }
-        
-        .toolbar input[type='text'] {
+        }}
+        .toolbar input[type='text'] {{
             width: 100px;
-        }
-        
-        .toolbar button:hover,
-        .toolbar input[type='text']:hover {
+        }}
+        .toolbar button:hover, .toolbar input[type='text']:hover {{
             background-color: #777;
-        }
-        
-        .toolbar button:active,
-        .toolbar input[type='text']:active {
+        }}
+        .toolbar button:active, .toolbar input[type='text']:active {{
             background-color: #444;
-        }
-        
-        .image-container {
+        }}
+        .image-container {{
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-        }
-        
-        .image {
+        }}
+        .image {{
             display: block;
             width: 200px;
             height: auto;
             margin: 10px;
-        }
+        }}
     </style>
 </head>
 <body>
