@@ -142,7 +142,7 @@ def generate_html(volume, comic_url):
     }
 
     function openRSSFeed() {
-        window.open('comic_{}_feed.xml', '_blank');
+        window.open('comic_${volume}_feed.xml', '_blank');
     }
 </script>
 </body>
