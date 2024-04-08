@@ -40,24 +40,81 @@ def generate_html(volume, comic_url):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comic Volume {volume}</title>
     <style>
-        body {{
+        body {
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        
+        .toolbar {
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: center; /* Center the toolbar horizontally */
+            align-items: center;
+        }
+        
+        .toolbar button,
+        .toolbar input[type='text'] {
+            background-color: #555;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        
+        .toolbar input[type='text'] {
+            width: 100px;
+        }
+        
+        .toolbar button:hover,
+        .toolbar input[type='text']:hover {
+            background-color: #777;
+        }
+        
+        .toolbar button:active,
+        .toolbar input[type='text']:active {
+            background-color: #444;
+        }
+        
+        .image-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            background-color: #f0f0f0;
-        }}
-        .image {{
+        }
+        
+        .image {
             display: block;
             width: 200px;
             height: auto;
             margin: 10px;
-        }}
+        }
     </style>
 </head>
 <body>
+<div class="toolbar">
+    <div>
+        <button onclick="resizeImages('small')">Small</button>
+        <button onclick="resizeImages('medium')">Medium</button>
+        <button onclick="resizeImages('large')">Large</button>
+        <input type="text" id="customSize" placeholder="Custom Size">
+        <button onclick="resizeImages('custom')">Apply</button>
+    </div>
+    <button onclick="openRSSFeed()">Open RSS Feed</button>
+</div>
+<div class="image-container">
 """
 
     page_number = 0
@@ -74,9 +131,34 @@ def generate_html(volume, comic_url):
             break
 
     html_content += """
+</div>
+<script>
+    function resizeImages(size) {
+        const images = document.querySelectorAll('.image');
+        images.forEach(image => {
+            if (size === 'small') {
+                image.style.width = '100px';
+            } else if (size === 'medium') {
+                image.style.width = '200px';
+            } else if (size === 'large') {
+                image.style.width = '300px';
+            } else if (size === 'custom') {
+                const customSize = document.getElementById('customSize').value;
+                if (customSize) {
+                    image.style.width = customSize + 'px';
+                }
+            }
+        });
+    }
+
+    function openRSSFeed() {
+        window.open('comic_{}_feed.xml', '_blank');
+    }
+</script>
 </body>
 </html>
-"""
+""".format(volume)
+
     return html_content
 
 # Loop through each volume
