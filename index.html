@@ -1,16 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comic</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SparklecareRSS</title>
+<link rel="icon" type="image/x-icon" href="https://www.sparklecarehospital.com/favicon.ico">
+<style>
+    body, * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-image: url('https://www.sparklecarehospital.com/media/assets/bg.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        min-height: calc(100vh - 40px);
+    }
+
+    .title {
+        text-align: center;
+        font-size: 48px;
+        color: #ff00aa;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    .description {
+        font-size: 14px;
+        color: #db1f85;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .description a {
+        color: #db1f85;
+        text-decoration: none;
+    }
+
+    .description a:hover {
+        text-decoration: underline;
+    }
+
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        max-width: 100%;
+        gap: 20px;
+        margin-top: auto;
+        margin-bottom: auto;
+        height: auto;
+    }
+
+    .book {
+        width: 250px;
+        height: 350px;
+        background-size: cover;
+        transition: all .3s ease-in-out;
+        transform-origin: left center 0px;
+        transform-style: preserve-3d;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        -webkit-backface-visibility: hidden;
+        overflow: hidden;
+    }
+
+    .book:hover {
+        cursor: pointer;
+        transform: rotateY(-28deg) rotateZ(-2deg) scale(1.02);
+        -webkit-backface-visibility: hidden;
+        box-shadow: 1px 3px 2px #353d85, 20px 8px 0 #525dc4;
+    }
+
+    .book::after {
+        content: "";
+        display: block;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: linear-gradient(-180deg, rgba(255, 255, 255, .1) 0%, rgba(255, 255, 255, 0) 60%);
+        transition: opacity 0.3s ease;
+    }
+
+    .book:hover::after {
+        opacity: 1;
+    }
+
+    @media screen and (min-width: 900px) {
+        .title {
+            margin-bottom: 0;
+        }
+        .container {
+            max-width: 1200px;
+            height: 350px;
+        }
+    }
+</style>
 </head>
 <body>
-    <h1>Welcome to the Comic Website!</h1>
-    <p>Click below to access the comic:</p>
-    <ul>
-        <li><a href="output/comic_feed.xml">Comic RSS Feed</a></li>
-        <li><a href="output/comic.html">Comic HTML Page</a></li>
-    </ul>
+<h1 class="title">SparklecareRSS</h1>
+<p class="description">
+    <a href="https://www.sparklecarehospital.com">The Official Sparklecare Comic</a> doesn't have an official RSS feed. This site is a fan site created to fix this.
+</p>
+<div class="container">
+    <div class="book" style="background-image: url('https://www.sparklecarehospital.com/media/page/0.png')"></div>
+    <div class="book" style="background-image: url('https://www.sparklecarehospital.com/media/page/v2/0.png')"></div>
+    <div class="book" style="background-image: url('https://www.sparklecarehospital.com/media/page/v3/0.png')"></div>
+    <div class="book" style="background-image: url('https://www.sparklecarehospital.com/media/page/v4/0.png')"></div>
+</div>
 </body>
 </html>
