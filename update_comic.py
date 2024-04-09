@@ -109,13 +109,18 @@ def generate_html(volume, comic_url):
 
     page_number = 0
     while True:
+        if (volume == "vol1" and page_number == 77) or (volume == "vol2" and page_number == 4):
+            page_number += 1
+            continue
+
         image_found = False
-        for char in ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']:
+        for char in ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'] + [f"-{i}" for i in range(10)] + ['_colors_kitty']:
             url = comic_url.format(page_number, char)
             if image_exists(url):
                 image_found = True
-                html_content += f'<img class="image" src="{url}" alt="Comic Volume {volume}, Page {page_number}">'
+                html_content += f'<img class="image" src="{url}" alt="Comic Volume {volume}, Page {page_number}{char}">'
                 page_number += 1
+                break
         
         if not image_found:
             break
@@ -167,6 +172,29 @@ for volume, comic_url in comic_urls.items():
         feed_link="https://www.sparklecarehospital.com",
         feed_description=f"Updates for Comic {volume}."
     )
+
+    # Add items to the RSS feed
+    page_number = 0
+    while True:
+        image_found = False
+        for char in ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'] + [f"-{i}" for i in range(10)] + ['_colors_kitty']:
+            if (volume == "vol1" and page_number == 77) or (volume == "vol2" and page_number == 4):
+                page_number += 1
+                continue
+
+            url = comic_url.format(page_number, char)
+            if image_exists(url):
+                rss_feed.add_item(
+                    title=f"Page {page_number}{char}",
+                    link=url,
+                    description=f"Comic volume {volume}, Page {page_number}{char}"
+                )
+                image_found = True
+                page_number += 1
+                break
+        
+        if not image_found:
+            break
 
     # Write RSS feed to a file
     rss_feed_output_path = f"comic_{volume}_feed.xml"
